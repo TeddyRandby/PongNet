@@ -9,7 +9,7 @@ enum ENTITIES {
 }
 
 class Const {
-    public static inline var FRICTION = 0.4;
+    public static inline var FRICTION = 0.1;
 
     public static inline var PADDLE_XR = 15;
     public static inline var PADDLE_YR = 70;

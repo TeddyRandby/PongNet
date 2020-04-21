@@ -1,6 +1,5 @@
 package src.ent;
 
-import h2d.Object;
 import hxd.Key;
 import src.ent.Entity;
 import src.Const;
@@ -37,10 +36,21 @@ class Paddle extends Entity {
                 leftkey = Key.LEFT;
                 rightkey = Key.RIGHT;
         }
-        if( Key.isDown(upkey) ) { this.dy+=(Const.PADDLE_SPEED * -1); }
-        if( Key.isDown(downkey) ) { this.dy+=(Const.PADDLE_SPEED); }
-        // if( Key.isDown(leftkey) ) { this.dx+=(Const.PADDLE_SPEED * -1); }
-        // if( Key.isDown(rightkey) ) { this.dx+=(Const.PADDLE_SPEED); }
-
+        if( Key.isDown(upkey) ) { addVel(upkey);}
+        if( Key.isDown(downkey) ) { addVel(downkey); }
     }
+
+    @:rpc(immediate) private function addVel(key: Int){
+        switch key {
+            case key = Key.UP:
+                this.dy+=(Const.PADDLE_SPEED * -1);
+            case key = Key.W:
+                this.dy+=(Const.PADDLE_SPEED * -1);
+            case key = Key.DOWN:
+                this.dy+=(Const.PADDLE_SPEED);
+            case key = Key.S:
+                this.dy+=(Const.PADDLE_SPEED);
+        }
+    }
+
 }
