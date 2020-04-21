@@ -78,6 +78,7 @@ class Entity implements hxbit.NetworkSerializable {
 		spr.x = xx;
 		spr.y = yy;
 	}
+	
 	public function preUpdateTask(?data:Any) {}
 
 	public function postUpdateTask(?data:Any) {}

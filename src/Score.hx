@@ -8,7 +8,7 @@ class Score {
     var score: Int;
 
     public function new(cx: Int, cy: Int, f: h2d.Font, s2d: h2d.Object) {
-        var scale = 20;
+        var scale = 8;
         tf = new h2d.Text(f, s2d);
         tf.textColor = 0xFFFFFF;
         tf.alpha = 0.6;
