@@ -2,30 +2,32 @@ package src.ent;
 
 import h2d.Bitmap;
 
-class Entity {
+class Entity implements hxbit.NetworkSerializable 	{
 
 	// Circular hitbox from center:
-	public var cx:Int;
-	public var cy:Int;
-	public var xr:Float;
-	public var yr:Float;
+	@:s public var cx:Int;
+	@:s public var cy:Int;
+	@:s public var xr:Float;
+	@:s public var yr:Float;
 	
 	// Coordinates for drawing, top left corner of hitbox.
-	public var xx: Float;
-	public var yy: Float;
+	@:s public var xx: Float;
+	@:s public var yy: Float;
 
 	// Movement.
-	public var dx:Float;
-	public var dy:Float;
-	public var friction: Float;
+	@:s public var dx:Float;
+	@:s public var dy:Float;
+	@:s public var friction: Float;
 
-	public var hitH: Float;
-	public var hitW: Float;
+	@:s public var hitH: Float;
+	@:s public var hitW: Float;
 
-	public var spr:Bitmap;
-	public var name: String;
+     public var spr:Bitmap;
+	@:s public var name: String;
 
-	public function new(cx:Int, cy:Int, wr:Int, hr:Int, spr: Bitmap) {
+	@:s public var uid : Int;
+
+	public function new(cx:Int, cy:Int, wr:Int, hr:Int, uid=0) {
 		// Center and center ratios for physics.
 		this.cx = cx;
 		this.cy = cy;
@@ -42,13 +44,11 @@ class Entity {
 		xx = (cx + xr) - hitW;
 		yy = (cy + yr) - hitH;
 
-
-		this.spr = spr;
 		this.name = "Entity";
 
 		// Draw at cx,cy
-        spr.x = xx;
-		spr.y = yy; 
+        // spr.x = xx;
+		// spr.y = yy; 
 	}
 
 	private function move(dt: Float){
@@ -82,15 +82,48 @@ class Entity {
 		spr.y = yy; 
 	}
 
-	public function update(dt: Float, ?preUpdateTask:Any->Void, ?preData : Any, ?postUpdateTask:Any->Void, ?postData : Any) {
-		if(preUpdateTask != null) preUpdateTask(preData);
+	public function preUpdateTask(?data: Any){
+
+	}
+
+	public function postUpdateTask(?data: Any){
+		
+	}
+
+	public function update(dt: Float,  ?data : Any) {
+		preUpdateTask(data);
 		
 		move(dt);
 
-        if(postUpdateTask != null) postUpdateTask(postData);
+        postUpdateTask(data);
 	}
+
+
 
 	public function toString(){
 		return(this.name);
+	}
+
+	public function networkAllow( op : hxbit.NetworkSerializable.Operation, propId : Int, client : hxbit.NetworkSerializable ) : Bool {
+		return client == this;
+	}
+
+	public function set_x( v : Float ) {
+		if( v == xx ) return v;
+		if( spr != null ) {
+			spr.x = v;
+			cx = Math.floor(xx + hitW);
+			xr = xx - cx;
+		}
+		return this.xx = v;
+	}
+
+	public function set_y( v : Float ) {
+		if( spr != null ) {
+			spr.x = v;
+			cy = Math.floor(yy + hitH);
+			yr = yy - cy;
+		}
+		return this.yy = v;
 	}
 }

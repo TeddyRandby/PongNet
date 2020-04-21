@@ -9,14 +9,13 @@ class Paddle extends Entity {
     
     public var type : Const.ENTITIES;
 
-    public function new(cx:Int,cy:Int, s2d: h2d.Object, type : Const.ENTITIES){
-        var spr = new h2d.Bitmap(h2d.Tile.fromColor(0xffffff, 2 * Const.PADDLE_XR, 2 * Const.PADDLE_YR),s2d);
-        super(cx,cy,Const.PADDLE_XR,Const.PADDLE_YR,spr);
+    public function new(cx:Int,cy:Int, type : Const.ENTITIES, uid=0){
+        super(cx,cy,Const.PADDLE_XR,Const.PADDLE_YR);
         this.type = type;
         this.name = "" + this.type;
     }
 
-    public function preUpdateTask(data : Any){
+    public override function preUpdateTask(?data : Any){
         var upkey : Int;
         var downkey : Int;
         var leftkey : Int;

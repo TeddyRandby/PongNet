@@ -71,7 +71,7 @@ class Ball extends Entity {
 			spr.parent.removeChild(this.spr);
 	}
 
-	public function preUpdateTask(entities:Any) {
+	override public function preUpdateTask(entities:Any) {
 		// Check for collisions before moving.
 		if (!Std.is(entities, Array))
 			return;
@@ -81,7 +81,7 @@ class Ball extends Entity {
 		}
 	}
 
-	public function postUpdateTask(data:Any) {
+	override public function postUpdateTask(data:Any) {
 
 		// After moving, keep the ball on screen.
 		if (cx + Const.BALL_R > Window.getInstance().width || cx - Const.BALL_R < 0) {
