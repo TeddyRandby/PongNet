@@ -13,7 +13,6 @@ class Ball extends Entity {
 
 	public function new(cx:Int, cy:Int, s2d:h2d.Object, onGoal:Const.ENTITIES->Void, type:Const.ENTITIES) {
 		var r = Const.BALL_R;
-		spr = new h2d.Bitmap(h2d.Tile.fromColor(0xff0000, 2 * r, 2 * r), s2d);
 		super(cx, cy, r, r, 10);
 		this.type = type;
 		this.prevCollision = null;
@@ -33,7 +32,8 @@ class Ball extends Entity {
 
 	private function collides(e:Entity) {
 		// Fast distance check
-		if (Math.abs(cx - e.cx) <= 100) {
+
+		if (e!=null && Math.abs(cx - e.cx) <= 100) {
 			// Real distance check
 			var xdist = Math.abs(e.cx + e.xr - cx - xr);
 			var ydist = Math.abs(e.cy + e.yr - cy - yr);
@@ -56,9 +56,7 @@ class Ball extends Entity {
 	}
 
 	@:rpc(server) private function delete() {
-		spr.tile.dispose();
-		if (spr.parent != null)
-			spr.parent.removeChild(this.spr);
+
 	}
 
 	override public function preUpdateTask(?data:Any) {
