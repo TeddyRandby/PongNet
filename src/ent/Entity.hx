@@ -2,38 +2,24 @@ package src.ent;
 
 import h2d.Bitmap;
 
-class Entity implements hxbit.NetworkSerializable {
+class Entity {
 	// Circular hitbox from center:
 	public var cx:Int;
 	public var cy:Int;
 	public var xr:Float;
 	public var yr:Float;
 
-	// Coordinates for drawing, top left corner of hitbox.
-	public var xx:Float;
-	public var yy:Float;
-
-	// Movement.
+	// Movement and Collision
 	public var dx:Float;
 	public var dy:Float;
 	public var friction:Float;
-
 	public var hitH:Float;
 	public var hitW:Float;
 
-	public var spr:Bitmap;
-	public var name:String;
-
-	public var uid:Int;
-
-	var net:Network;
+	public var name = "Entity";
 
 	public function new(cx:Int, cy:Int, wr:Int, hr:Int, uid = 0) {
 		// Center and center ratios for physics.
-		this.cx = cx;
-		this.cy = cy;
-		this.xr = 0;
-		this.yr = 0;
 
 		this.dx = 0;
 		this.dy = 0;
@@ -42,10 +28,7 @@ class Entity implements hxbit.NetworkSerializable {
 		this.hitH = hr;
 		this.hitW = wr;
 		this.friction = Const.FRICTION;
-		xx = (cx + xr) - hitW;
-		yy = (cy + yr) - hitH;
 
-		this.name = "Entity";
 	}
 
 	private function move(dt:Float) {
@@ -71,12 +54,6 @@ class Entity implements hxbit.NetworkSerializable {
 			cy++;
 			yr--;
 		}
-
-		xx = (xr + cx) - hitW;
-		yy = (yr + cy) - hitH;
-
-		spr.x = xx;
-		spr.y = yy;
 	}
 	
 	public function preUpdateTask(?data:Any) {}
@@ -89,43 +66,5 @@ class Entity implements hxbit.NetworkSerializable {
 		move(dt);
 
 		postUpdateTask(data);
-	}
-
-	public function toString() {
-		return (this.name);
-	}
-
-	public function set_x(v:Float) {
-		networkLocalChange(function() {
-			if (spr != null) {
-				spr.x = v;
-				cx = Math.floor(xx + hitW);
-				xr = xx - cx;
-			}
-		});
-		return this.xx = v;
-	}
-
-	public function set_y(v:Float) {
-		networkLocalChange(function() {
-			if (spr != null) {
-				spr.x = v;
-				cy = Math.floor(yy + hitH);
-				yr = yy - cy;
-			}
-		});
-		return this.yy = v;
-	}
-
-	public function networkAllow(op:hxbit.NetworkSerializable.Operation, propId:Int, client:hxbit.NetworkSerializable):Bool {
-		return client == this;
-	}
-
-	public function init() {
-		// Override this in classes which extend it.
-	}
-
-	public function alive() {
-		// Override this in classes which extend it.
 	}
 }
