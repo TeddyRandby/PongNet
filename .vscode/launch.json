@@ -8,7 +8,7 @@
             "name": "HashLink (launch)",
             "request": "launch",
             "type": "hl",
-            "port": 6448,
+            "port": 6428,
             "hxml": "build.hxml",
             "cwd": "${workspaceFolder}",
             "preLaunchTask": {

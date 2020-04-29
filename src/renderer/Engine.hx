@@ -4,7 +4,7 @@ import h2d.Tile;
 import h2d.Bitmap;
 
 class Engine {
-	private var s2d:h2d.Object;
+	public var s2d:h2d.Object;
 	private var counter:Int = -1;
 	private var objects:Array<RenderObject> = [];
 

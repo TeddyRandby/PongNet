@@ -110,10 +110,10 @@ class Network extends hxd.App {
 
 		ball = new Ball(Math.floor(wx / 2), Math.floor(wy / 2), s2d, onGoal, Const.ENTITIES.BALL);
 
-		p1tf = new Score(Const.ENTITIES.GOAL1, s2d);
+		p1tf = new Score(Const.ENTITIES.GOAL1);
 		// p1tf.score = p1score;
 
-		p2tf = new Score(Const.ENTITIES.GOAL2, s2d);
+		p2tf = new Score(Const.ENTITIES.GOAL2);
 		// p2tf.score = p2score;
 
 		log("Live");
