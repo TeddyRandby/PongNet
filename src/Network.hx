@@ -1,5 +1,6 @@
 package src;
 
+import h3d.pass.Default;
 import src.ent.Paddle;
 import src.ent.Ball;
 import haxe.Timer;
@@ -18,18 +19,25 @@ class Network extends hxd.App {
 	public var event:hxd.WaitEvent;
 	public var uid:Int;
 	public var clientPaddle:Paddle;
+	public var clientOpponent:Paddle;
 	public var ball:Ball;
 	public var wx:Int;
 	public var wy:Int;
 	public var p1tf:Score;
 	public var p2tf:Score;
+
+	@:s var p1score:Int;
+	@:s var p2score:Int;
+
 	public var eng:Engine;
-	public var onUpdate: Array<Float->Void> = [];
+	public var onUpdate:Array<(Float, ?Any) -> Void> = [];
 
 	override function init() {
 		event = new hxd.WaitEvent();
 		host = new hxd.net.SocketHost();
 		eng = new Engine(s2d);
+		wx = hxd.Window.getInstance().width;
+		wy = hxd.Window.getInstance().height;
 
 		host.setLogger(function(msg) log(msg));
 
@@ -49,6 +57,7 @@ class Network extends hxd.App {
 			host.onMessage = function(p, uid:Int) {
 				log("Client identified (" + uid + ")");
 				var paddleClient = new Paddle(Const.ENTITIES.P2, uid);
+				clientOpponent = paddleClient;
 				p.ownerObject = paddleClient;
 				p.sync();
 			};
@@ -77,15 +86,35 @@ class Network extends hxd.App {
 		haxe.Log.trace(s, pos);
 	}
 
+	private function onGoal(type:Const.ENTITIES) {
+		switch (type) {
+			case Const.ENTITIES.GOAL1:
+				p2tf.addScore();
+			case Const.ENTITIES.GOAL2:
+				p1tf.addScore();
+			default:
+				trace("nothing");
+		}
+		ball.cx = Math.floor(wx / 2);
+		ball.cy = Math.floor(wy / 2);
+		ball.dx = 0;
+		ball.dy = 0;
+		Timer.delay(() -> {
+			ball.dx = Const.BALL_MAX_SPEED * (Math.random()) - (Const.BALL_MAX_SPEED / 2);
+			ball.dy = Const.BALL_MAX_SPEED * (Math.random()) - (Const.BALL_MAX_SPEED / 2);
+		}, 1000);
+	}
+
 	function start() {
 		clientPaddle = new Paddle(Const.ENTITIES.P1);
-		
 
-		// p1tf = new Score(Const.ENTITIES.GOAL1, s2d);
+		ball = new Ball(Math.floor(wx / 2), Math.floor(wy / 2), s2d, onGoal, Const.ENTITIES.BALL);
 
-		// p2tf = new Score(Const.ENTITIES.GOAL2, s2d);
+		p1tf = new Score(Const.ENTITIES.GOAL1, s2d);
+		// p1tf.score = p1score;
 
-		// ball = new Ball(Math.floor(wx / 2), Math.floor(wy / 2), s2d, onGoal, Const.ENTITIES.BALL);
+		p2tf = new Score(Const.ENTITIES.GOAL2, s2d);
+		// p2tf.score = p2score;
 
 		log("Live");
 		host.makeAlive();
@@ -94,8 +123,8 @@ class Network extends hxd.App {
 	override function update(dt:Float) {
 		event.update(dt);
 
-		for ( func in onUpdate) {
-			func(dt);
+		for (func in onUpdate) {
+			func(dt,[clientPaddle,clientOpponent]);
 		}
 
 		// if (ball != null) {

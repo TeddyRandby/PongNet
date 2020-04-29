@@ -6,7 +6,7 @@ import h2d.Text;
 class Score implements hxbit.NetworkSerializable {
 
     var tf : Text;
-    var score: Int;
+    public var score: Int;
 
     public function new(type: Const.ENTITIES, s2d: h2d.Object) {
         var wx = hxd.Window.getInstance().width;

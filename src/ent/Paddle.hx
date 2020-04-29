@@ -91,7 +91,7 @@ class Paddle implements NetworkSerializable {
 		}
 	}
 
-	public function update(dt:Float) {
+	public function update(dt:Float, ?data: Any) {
 		if (net.clientPaddle == this) {
 			preUpdateTask();
 			dy *= Math.pow(friction, dt);

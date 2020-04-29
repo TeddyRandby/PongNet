@@ -26,10 +26,9 @@ class Engine {
 	}
 
 	public function registerBall(x, y):Int {
-		objects.push(new RenderObject(Tile.fromColor(0x000000, Const.BALL_R * 2, Const.BALL_R * 2), s2d));
+		objects.push(new RenderObject(Tile.fromColor(0x0000FF, Const.BALL_R * 2, Const.BALL_R * 2), s2d));
 		counter++;
 		setObject(x, y, counter);
-
 		return counter;
 	}
 
